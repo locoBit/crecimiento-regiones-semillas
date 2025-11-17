@@ -79,10 +79,10 @@ def region_growing_global_v3(image_path, threshold):
 
 # --- Ejemplo de Uso con Visualización ---
 
-# image_path = 'gato.png' # Ajusta tu ruta
-image_path = 'autos-game.png' # Ajusta tu ruta
-# image_path = 'autos-real.png' # Ajusta tu ruta
-intensity_threshold = 15
+image_path = 'segmentationImages/cat-original.png' # Ajusta tu ruta
+# image_path = 'segmentationImages/cars1-original.png' # Ajusta tu ruta
+# image_path = 'segmentationImages/cars2-original.png' # Ajusta tu ruta
+intensity_threshold = 30
 
 # 1. Ejecutar el algoritmo
 segmented_map, seeds = region_growing_global_v3(image_path, intensity_threshold)
@@ -124,4 +124,4 @@ if segmented_map is not None:
     plt.title(f"Mapa de Regiones Segmentadas (Umbral: {intensity_threshold})")
     
     # plt.show()
-    plt.savefig('resultado_segmentacion.png')
+    plt.savefig('output/output-segmentation.png')
