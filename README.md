@@ -1,23 +1,20 @@
-# 🚀 Crecimiento de Regiones Basado en Semillas (Global)
+# ✨ Algoritmos de Segmentación de Imágenes
 
-Este proyecto implementa la **Versión 3** del algoritmo de **Crecimiento de Regiones Multisemilla (Global)**. Su objetivo es segmentar automáticamente todas las regiones de una imagen en escala de grises, utilizando un criterio adaptativo (basado en la media de la región) y visualizando los puntos de inicio (semillas) de cada región detectada.
-
----
-
-## 🛠️ Requisitos del Sistema
-
-* **Python 3.x**
-* **Gestor de paquetes `pip`**
+Este repositorio contiene implementaciones de tres algoritmos fundamentales para la segmentación de imágenes en Python, usando OpenCV y Matplotlib.
 
 ---
 
-## 📦 Instalación de Dependencias
+## 🛠️ Requisitos e Instalación
 
-El proyecto requiere las siguientes librerías principales de Python:
+### Dependencias
 
-1. **NumPy:** Para el manejo eficiente de matrices de imagen.
-2. **OpenCV (`opencv-python`):** Para la lectura de imágenes.
-3. **Matplotlib:** Para la visualización de los resultados.
+Los tres scripts utilizan las mismas librerías principales:
+
+* **NumPy:** Para manejo eficiente de matrices y datos de imagen.
+* **OpenCV (`opencv-python`):** Para la lectura y manipulación de imágenes.
+* **Matplotlib:** Para la visualización de los resultados.
+
+### Instalación
 
 Instala todas las dependencias con el siguiente comando:
 
@@ -27,54 +24,75 @@ pip install numpy opencv-python matplotlib
 
 ---
 
-## ▶️ Ejecución del Proyecto
+## 📂 Estructura de Datos
 
-1. **Guarda tu Imagen:**
-    Coloca la imagen que deseas segmentar (e.g., `gato.png`) en el mismo directorio que el script (`semillas.py`) o utiliza su ruta completa.
+Todas las imágenes de prueba deben colocarse dentro de la carpeta: `segmentationImages/`.
 
-2. **Configura las Variables:**
-    Abre el script y ajusta las variables de configuración en la sección de "Ejemplo de Uso":
-
-    * **`image_path`**: La ruta a tu archivo de imagen.
-    * **`intensity_threshold`**: El valor que define la **similitud de intensidad** para el crecimiento de la región. **Ajustar este valor es crucial** para obtener buenos resultados (un rango típico de prueba es entre 5 y 30).
-
-    ```python
-    image_path = 'gato.png' 
-    intensity_threshold = 15 # Ajusta este valor según tu imagen
-    ```
-
-3. **Corre el Script:**
-    Ejecuta el proyecto desde tu terminal:
-
-    ```bash
-    python semillas.py
-    ```
-
-El script imprimirá el número total de regiones detectadas y mostrará (o guardará, si usas el modo `Agg`) dos gráficas: la imagen original con las semillas marcadas en rojo, y el mapa de regiones segmentadas con un código de colores.
+Asegúrate de que la ruta `image_path` dentro de cada script apunte correctamente a tus imágenes.
 
 ---
 
-## 🛑 Solución de Errores Frecuentes
+## ▶️ Ejecución de los Algoritmos
 
-### 1. `ModuleNotFoundError: No module named 'cv2'` o `'matplotlib'`
+A continuación, se detalla cómo ejecutar y configurar cada uno de los tres algoritmos de segmentación.
 
-Asegúrate de haber ejecutado correctamente la instalación de dependencias (`pip install ...`). Si estás usando un **entorno virtual**, verifica que el entorno esté activado.
+### 1. Segmentación por Crecimiento de Regiones (Seed Segmentation)
 
-### 2. `ModuleNotFoundError: No module named '_tkinter'`
+Este algoritmo (`seedSegmentation.py`) detecta todas las regiones de la imagen a partir de semillas, utilizando un criterio de similitud adaptativo basado en la media de la región.
 
-Este error ocurre cuando **Matplotlib** no puede encontrar las librerías necesarias para dibujar las ventanas gráficas interactivas (`TkAgg`).
+**Fichero:** `seedSegmentation.py`
 
-**Solución Recomendada (Modo Sin Ventana):**
+#### Configuración
 
-Si la solución de reinstalación de Python no funciona, evita el modo interactivo configurando Matplotlib para que guarde el resultado en un archivo:
+Ajusta las siguientes variables en la sección de "Ejemplo de Uso" del archivo:
 
-1. **Añade esta línea al inicio del script, antes de `import matplotlib.pyplot as plt`:**
-    ```python
-    import matplotlib
-    matplotlib.use('Agg')
-    ```
-2. **Reemplaza `plt.show()`** en la parte de visualización con la siguiente línea para guardar el resultado:
-    ```python
-    plt.savefig('output_segmentacion_resultado.png')
-    plt.close()
-    ```# crecimiento-regiones-semillas
+* **`image_path`**: Ruta a la imagen de entrada (ejemplo: `segmentationImages/gato.png`).
+* **`intensity_threshold`**: Valor clave para el algoritmo. Define la tolerancia de similitud para que los píxeles se unan a una región.
+
+#### Comando
+
+```bash
+python seedSegmentation.py
+```
+
+---
+
+### 2. Segmentación Watershed (Cuencas Hidrográficas)
+
+El algoritmo Watershed (`watershedSegmentation.py`) es eficaz para separar objetos que se tocan o están superpuestos. Trata la imagen como un mapa topográfico donde las intensidades son alturas.
+
+**Fichero:** `watershedSegmentation.py`
+
+#### Configuración
+
+Este algoritmo requiere preprocesamiento (detección de bordes y marcadores internos) que debe configurarse en el código:
+
+* **`image_path`**: Ruta a la imagen de entrada.
+* **Parámetros de Preprocesamiento**: Probablemente necesitará ajustar umbralización, filtrado (`kernel_size`) y el manejo de marcadores iniciales.
+
+#### Comando
+
+```bash
+python watershedSegmentation.py
+```
+
+---
+
+### 3. Segmentación por Corte de Gráficas (Graph Cut)
+
+El método Graph Cut (`graphCutSegmentation.py`) modela la segmentación como un problema de flujo de corte mínimo en un grafo, lo que permite una segmentación óptima para separar un objeto del fondo, generalmente requiriendo que el usuario defina interactivamente las áreas de "primer plano" y "fondo" (a través de marcadores o rectángulos).
+
+**Fichero:** `graphCutSegmentation.py`
+
+#### Configuración
+
+Este algoritmo suele requerir la definición de una región inicial:
+
+* **`image_path`**: Ruta a la imagen de entrada.
+* **Área de Interés (ROI)**: Se debe definir el rectángulo inicial que delimita el objeto de interés.
+
+#### Comando
+
+```bash
+python graphCutSegmentation.py
+```
